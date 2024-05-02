@@ -1,37 +1,33 @@
-
 const cardTemplate = document.querySelector('#card-template').content;
 const placesList = document.querySelector('.places__list');
 
-// @todo: Функция создания карточки
-
-function addCard(element) {
+// СОЗДАНИЕ КАРТОЧКИ
+function createCard(cardData, removeHandler) {
 const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true); 
 
-cardElement.querySelector('.card__image').src = element.link;
-cardElement.querySelector('.card__title').textContent = element.name;
+// наполнение карточки
+cardElement.querySelector('.card__image').src = cardData.link;
+cardElement.querySelector('.card__image').alt = cardData.name;
+cardElement.querySelector('.card__title').textContent = cardData.name;
 
+
+// удаление карточки
 const deleteButton = cardElement.querySelector('.card__delete-button');
-deleteButton.addEventListener('click', function () {
-    const listItem = deleteButton.closest('.places__item');
-    listItem.remove();
-  }); 
+const currentCard = deleteButton.closest('.places__item');
+deleteButton.addEventListener('click', function() {
+  removeHandler(currentCard)
+}); 
+
+// возврат элемента карточки
 return cardElement;
 };
 
-// @todo: Вывести карточки на страницу
-
+// ВЫВОД КАРТОЧЕК
 initialCards.forEach(function (item) {
-placesList.append(addCard(item));
+placesList.append(createCard(item, deleteCard));
 });
 
-
-
-
-
-  
-
-  
-
-
-
-
+// ХЭНДЛЕР УДАЛЕНИЯ
+function deleteCard(card) {
+card.remove();
+};
