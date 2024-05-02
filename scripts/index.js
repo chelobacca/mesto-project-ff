@@ -6,8 +6,9 @@ function createCard(cardData, removeHandler) {
 const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true); 
 
 // наполнение карточки
-cardElement.querySelector('.card__image').src = cardData.link;
-cardElement.querySelector('.card__image').alt = cardData.name;
+const imgSelector = cardElement.querySelector('.card__image');
+imgSelector.src = cardData.link;
+imgSelector.alt = cardData.name;
 cardElement.querySelector('.card__title').textContent = cardData.name;
 
 
