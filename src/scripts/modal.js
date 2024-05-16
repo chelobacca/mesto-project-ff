@@ -1,15 +1,13 @@
-// export { openModal, closeModal };
+export { openModal, closeModal };
 
 
-// function openModal {
+function openModal (popupElement) {
+    popupElement.classList.toggle('popup_is-opened');
+};
 
-// };
-
-
-// function closeModal {
-    
-// };
-
+function closeModal (popupElement) {
+    popupElement.classList.toggle('popup_is-opened');
+};
 
 
 

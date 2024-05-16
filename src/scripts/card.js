@@ -1,11 +1,11 @@
-export { createCard, deleteCard, likeCard, openCardPopup };
+export { createCard, deleteCard, likeCard };
 
 import { cardTemplate } from './index.js';
-import { openModal, closeModal } from './modal.js'; //нужен ли closeModal?
+import { openModal, closeModal } from './modal.js'; //позже: нужен ли здесь closeModal?
 
 
 // СОЗДАНИЕ КАРТОЧКИ
-function createCard(cardData, removeHandler, likeHandler, cardPopupHandler) {
+function createCard(cardData, removeHandler, likeHandler) {
     const cardElement = cardTemplate.querySelector(".places__item").cloneNode(true);
   
     // наполнение карточки
@@ -27,13 +27,13 @@ function createCard(cardData, removeHandler, likeHandler, cardPopupHandler) {
         likeHandler(likeButton);
       });
 
-    //popup
+    // попап карточки
     const imgPopup = document.querySelector(".popup_type_image");
     imgSelector.addEventListener('click', function () {
-        cardPopupHandler(imgPopup, imgSelector);
+      openModal(imgPopup);
+      document.querySelector(".popup__image").src = cardData.link;
+      document.querySelector(".popup__caption").textContent = cardData.name;
       });
-
-      
 
     // возврат элемента карточки
     return cardElement;
@@ -49,13 +49,6 @@ function likeCard(like) {
   like.classList.toggle('card__like-button_is-active')
 };
 
-//ХЭНДЛЕР ПОПАПА
-function openCardPopup(popup, srce) {
-    console.log(popup);
-    popup.classList.toggle('popup_is-opened');
-    popup.querySelector(".popup__image").src = srce.src;
-    popup.querySelector(".popup__caption").textContent = srce.alt;
-};
 
 
 
