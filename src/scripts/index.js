@@ -3,7 +3,7 @@ import { initialCards } from './cards.js';
 import { createCard, deleteCard, likeCard } from './card.js';
 import { openModal, closeModal } from './modal.js';
 
-export { cardTemplate };
+export { cardTemplate, handleEscapeKeydown };
 
 const placesList = document.querySelector(".places__list");
 const cardTemplate = document.querySelector("#card-template").content;
@@ -14,6 +14,7 @@ const editPopup = document.querySelector(".popup_type_edit");
 const newCardButton = document.querySelector(".profile__add-button");
 const newCardPopup = document.querySelector(".popup_type_new-card");
 
+const profileForm = document.forms[0];
 
 // ВЫВОД КАРТОЧЕК
 initialCards.forEach(function (item) {
@@ -22,7 +23,10 @@ initialCards.forEach(function (item) {
 
 // ПОПАП ПРОФИЛЯ
 editButton.addEventListener('click', function () {
+  nameInput.value = document.querySelector(".profile__title").textContent;
+  jobInput.value = document.querySelector(".profile__description").textContent;
   openModal(editPopup);
+
 });
 
 // ПОПАП ДОБАВЛЕНИЯ КАРТОЧКИ
@@ -37,17 +41,18 @@ document.addEventListener('click', function (evt) {
   }
   if (evt.target.classList.contains('popup__close')) {
     const openedPopup = document.querySelector(".popup_is-opened");
+    profileForm.reset();
     closeModal(openedPopup);
   }
 });
 
 //ЗАКРЫТИЕ ПО ESC
-document.addEventListener('keydown', function(evt){
+function handleEscapeKeydown(evt) {
   if (evt.key === 'Escape') {
     const openedPopup = document.querySelector(".popup_is-opened");
     closeModal(openedPopup);
   }
-});
+}
 
 // РЕДАКТИРОВАНИЕ ПРОФИЛЯ
 const formElement = document.querySelector(".popup_type_edit");
@@ -58,6 +63,8 @@ function handleFormSubmit(evt) {
   evt.preventDefault(); 
   document.querySelector(".profile__title").textContent = nameInput.value;
   document.querySelector(".profile__description").textContent = jobInput.value;
+  const openedPopup = document.querySelector(".popup_is-opened");
+  closeModal(openedPopup);
 }
 
 formElement.addEventListener('submit', handleFormSubmit); 
@@ -73,13 +80,13 @@ function handleCardFormSubmit(evt) {
   obj['name'] = cardNameInput.value;
   obj['link'] = cardLinkInput.value;
   placesList.prepend(createCard(obj, deleteCard, likeCard));
-}
 
+  cardNameInput.value = '';
+  cardLinkInput.value = '';
+  const openedPopup = document.querySelector(".popup_is-opened");
+    closeModal(openedPopup);
+
+}
 addCardFormElement.addEventListener('submit', handleCardFormSubmit); 
 
 
-
-
-
-
-// console.log(openedPopup);
