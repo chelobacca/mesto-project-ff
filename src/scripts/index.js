@@ -1,7 +1,7 @@
-import '../pages/index.css'; // импорт главного файла стилей 
-import { initialCards } from './cards.js';
-import { createCard, deleteCard, likeCard } from './card.js';
-import { openModal, closeModal } from './modal.js';
+import "../pages/index.css"; // импорт главного файла стилей
+import { initialCards } from "./cards.js";
+import { createCard, deleteCard, likeCard } from "./card.js";
+import { openModal, closeModal } from "./modal.js";
 
 export { cardTemplate, handleEscapeKeydown };
 
@@ -22,24 +22,23 @@ initialCards.forEach(function (item) {
 });
 
 // ПОПАП ПРОФИЛЯ
-editButton.addEventListener('click', function () {
+editButton.addEventListener("click", function () {
   nameInput.value = document.querySelector(".profile__title").textContent;
   jobInput.value = document.querySelector(".profile__description").textContent;
   openModal(editPopup);
-
 });
 
 // ПОПАП ДОБАВЛЕНИЯ КАРТОЧКИ
-newCardButton.addEventListener('click', function () {
+newCardButton.addEventListener("click", function () {
   openModal(newCardPopup);
 });
 
 //ЗАКРЫТИЕ ПО КЛИКУ НА ОВЕРЛЕЙ И КРЕСТИК
-document.addEventListener('click', function (evt) {
-  if (evt.target.classList.contains('popup_is-opened')) {
+document.addEventListener("click", function (evt) {
+  if (evt.target.classList.contains("popup_is-opened")) {
     closeModal(evt.target);
   }
-  if (evt.target.classList.contains('popup__close')) {
+  if (evt.target.classList.contains("popup__close")) {
     const openedPopup = document.querySelector(".popup_is-opened");
     profileForm.reset();
     closeModal(openedPopup);
@@ -48,7 +47,7 @@ document.addEventListener('click', function (evt) {
 
 //ЗАКРЫТИЕ ПО ESC
 function handleEscapeKeydown(evt) {
-  if (evt.key === 'Escape') {
+  if (evt.key === "Escape") {
     const openedPopup = document.querySelector(".popup_is-opened");
     closeModal(openedPopup);
   }
@@ -60,33 +59,31 @@ const nameInput = formElement.querySelector(".popup__input_type_name");
 const jobInput = formElement.querySelector(".popup__input_type_description");
 
 function handleFormSubmit(evt) {
-  evt.preventDefault(); 
+  evt.preventDefault();
   document.querySelector(".profile__title").textContent = nameInput.value;
   document.querySelector(".profile__description").textContent = jobInput.value;
   const openedPopup = document.querySelector(".popup_is-opened");
   closeModal(openedPopup);
 }
 
-formElement.addEventListener('submit', handleFormSubmit); 
+formElement.addEventListener("submit", handleFormSubmit);
 
-// ДОБАВЛЕНИЕ КАРТОЧКИ 
+// ДОБАВЛЕНИЕ КАРТОЧКИ
 const addCardFormElement = document.querySelector(".popup_type_new-card");
 const cardNameInput = addCardFormElement.querySelector(".popup__input_type_card-name");
 const cardLinkInput = addCardFormElement.querySelector(".popup__input_type_url");
 
 function handleCardFormSubmit(evt) {
-  evt.preventDefault(); 
+  evt.preventDefault();
   let obj = {};
-  obj['name'] = cardNameInput.value;
-  obj['link'] = cardLinkInput.value;
+  obj["name"] = cardNameInput.value;
+  obj["link"] = cardLinkInput.value;
   placesList.prepend(createCard(obj, deleteCard, likeCard));
 
-  cardNameInput.value = '';
-  cardLinkInput.value = '';
+  cardNameInput.value = "";
+  cardLinkInput.value = "";
   const openedPopup = document.querySelector(".popup_is-opened");
-    closeModal(openedPopup);
-
+  closeModal(openedPopup);
 }
-addCardFormElement.addEventListener('submit', handleCardFormSubmit); 
-
+addCardFormElement.addEventListener("submit", handleCardFormSubmit);
 
