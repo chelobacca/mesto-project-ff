@@ -1,13 +1,8 @@
 export { createCard, deleteCard, likeCard };
 
-import { cardTemplate } from "./index.js";
-import { openModal } from "./modal.js";
-
 // СОЗДАНИЕ КАРТОЧКИ
-function createCard(cardData, removeHandler, likeHandler) {
-  const cardElement = cardTemplate
-    .querySelector(".places__item")
-    .cloneNode(true);
+function createCard(template, cardData, removeHandler, likeHandler, popupOpener) {
+  const cardElement = template.querySelector(".places__item").cloneNode(true);
 
   // наполнение карточки
   const imgSelector = cardElement.querySelector(".card__image");
@@ -17,9 +12,8 @@ function createCard(cardData, removeHandler, likeHandler) {
 
   // удаление карточки
   const deleteButton = cardElement.querySelector(".card__delete-button");
-  const currentCard = deleteButton.closest(".places__item");
   deleteButton.addEventListener("click", function () {
-    removeHandler(currentCard);
+    removeHandler(cardElement);
   });
 
   // like
@@ -28,13 +22,8 @@ function createCard(cardData, removeHandler, likeHandler) {
     likeHandler(likeButton);
   });
 
-  // попап карточки
-  const imgPopup = document.querySelector(".popup_type_image");
-  imgSelector.addEventListener("click", function () {
-    openModal(imgPopup);
-    document.querySelector(".popup__image").src = cardData.link;
-    document.querySelector(".popup__caption").textContent = cardData.name;
-  });
+  // слушатель на превью картинки
+  imgSelector.addEventListener("click", popupOpener);
 
   // возврат элемента карточки
   return cardElement;

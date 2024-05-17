@@ -1,5 +1,12 @@
 export { openModal, closeModal };
-import { handleEscapeKeydown } from "./index.js";
+
+//ЗАКРЫТИЕ ПО ESC
+function handleEscapeKeydown(evt) {
+  if (evt.key === "Escape") {
+    const openedPopup = document.querySelector(".popup_is-opened");
+    closeModal(openedPopup);
+  }
+}
 
 function openModal(popupElement) {
   popupElement.classList.toggle("popup_is-opened");
@@ -10,3 +17,4 @@ function closeModal(popupElement) {
   popupElement.classList.toggle("popup_is-opened");
   document.removeEventListener("keydown", handleEscapeKeydown);
 }
+
