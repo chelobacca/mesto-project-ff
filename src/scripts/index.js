@@ -18,7 +18,7 @@ const newCardButton = document.querySelector(".profile__add-button");
 const newCardPopup = document.querySelector(".popup_type_new-card");
 
 const imgPopup = document.querySelector(".popup_type_image");
-const popupImgSelector = imgPopup.querySelector(".popup__image");
+const popupFullImg = imgPopup.querySelector(".popup__image");
 const popupImgCaption = imgPopup.querySelector(".popup__caption");
 
 // ВЫВОД КАРТОЧЕК
@@ -40,12 +40,11 @@ newCardButton.addEventListener("click", function () {
   openModal(newCardPopup);
 });
 
-// ПОПАП КАРТОЧКИ
-function openImgPopup(evt) {
+function openImgPopup(cardDataObj) {
   openModal(imgPopup);
-  popupImgSelector.src = evt.target.src;
-  popupImgSelector.alt = evt.target.alt;
-  popupImgCaption.textContent = evt.target.alt;
+  popupFullImg.src = cardDataObj.link;
+  popupFullImg.alt = cardDataObj.name;
+  popupImgCaption.textContent = cardDataObj.name;
 }
 
 //ЗАКРЫТИЕ ПО КЛИКУ НА ОВЕРЛЕЙ И КРЕСТИК

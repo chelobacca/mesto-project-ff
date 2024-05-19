@@ -1,13 +1,13 @@
 export { createCard, deleteCard, likeCard };
 
 // СОЗДАНИЕ КАРТОЧКИ
-function createCard(template, cardData, removeHandler, likeHandler, popupOpener) {
+function createCard(template, cardData, removeHandler, likeHandler, ImgPopupOpener) {
   const cardElement = template.querySelector(".places__item").cloneNode(true);
 
   // наполнение карточки
-  const imgSelector = cardElement.querySelector(".card__image");
-  imgSelector.src = cardData.link;
-  imgSelector.alt = cardData.name;
+  const cardImage = cardElement.querySelector(".card__image");
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
   cardElement.querySelector(".card__title").textContent = cardData.name;
 
   // удаление карточки
@@ -23,7 +23,7 @@ function createCard(template, cardData, removeHandler, likeHandler, popupOpener)
   });
 
   // слушатель на превью картинки
-  imgSelector.addEventListener("click", popupOpener);
+  cardImage.addEventListener('click', () => ImgPopupOpener(cardData));
 
   // возврат элемента карточки
   return cardElement;
@@ -38,3 +38,4 @@ function deleteCard(card) {
 function likeCard(like) {
   like.classList.toggle("card__like-button_is-active");
 }
+
