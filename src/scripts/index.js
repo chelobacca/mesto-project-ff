@@ -1,16 +1,21 @@
 import "../pages/index.css"; // импорт главного файла стилей
+
 import { initialCards } from "./cards.js";
 import { createCard, deleteCard, likeCard } from "./card.js";
 import { openModal, closeModal } from "./modal.js";
+import { enableValidation } from "./validation.js";
 
 const placesList = document.querySelector(".places__list");
 const cardTemplate = document.querySelector("#card-template").content;
 
 const editButton = document.querySelector(".profile__edit-button");
-const editPopup = document.querySelector(".popup_type_edit");
 const editProfileFormElement = document.querySelector(".popup_type_edit");
-const nameInput = editProfileFormElement.querySelector(".popup__input_type_name");
-const jobInput = editProfileFormElement.querySelector(".popup__input_type_description");
+const nameInput = editProfileFormElement.querySelector(
+  ".popup__input_type_name"
+);
+const jobInput = editProfileFormElement.querySelector(
+  ".popup__input_type_description"
+);
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
@@ -32,7 +37,7 @@ initialCards.forEach(function (item) {
 editButton.addEventListener("click", function () {
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
-  openModal(editPopup);
+  openModal(editProfileFormElement);
 });
 
 // ПОПАП ДОБАВЛЕНИЯ КАРТОЧКИ
@@ -67,13 +72,15 @@ function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
-  closeModal(editPopup);
+  closeModal(editProfileFormElement);
 }
 
 editProfileFormElement.addEventListener("submit", handleProfileFormSubmit);
 
 // ДОБАВЛЕНИЕ КАРТОЧКИ
-const cardNameInput = newCardPopup.querySelector(".popup__input_type_card-name");
+const cardNameInput = newCardPopup.querySelector(
+  ".popup__input_type_card-name"
+);
 const cardLinkInput = newCardPopup.querySelector(".popup__input_type_url");
 
 function handleCardFormSubmit(evt) {
@@ -90,3 +97,16 @@ function handleCardFormSubmit(evt) {
   closeModal(newCardPopup);
 }
 newCardPopup.addEventListener("submit", handleCardFormSubmit);
+
+// VALIDATION
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+
+enableValidation(validationConfig);
+

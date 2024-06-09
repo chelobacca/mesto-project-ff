@@ -19,7 +19,7 @@ function createCard(template, cardData, removeHandler, likeHandler, ImgPopupOpen
   // like
   const likeButton = cardElement.querySelector(".card__like-button");
   likeButton.addEventListener("click", function () {
-    likeHandler(likeButton);
+    likeHandler(likeButton); 
   });
 
   // слушатель на превью картинки

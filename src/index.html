@@ -18,6 +18,7 @@
           class="logo header__logo"
         />
       </header>
+      <!-- MAIN -->
       <main class="content">
         <section class="profile page__section">
           <div
@@ -38,59 +39,74 @@
       <footer class="footer page__section">
         <p class="footer__copyright">© 2021 Mesto Russia</p>
       </footer>
-      
+      <!-- PROFILE -->
       <div class="popup popup_type_edit">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Редактировать профиль</h3> 
-          <form class="popup__form" name="edit-profile">
+          <form class="popup__form" name="edit-profile" novalidate>
             <input
+              id="name-input"
               type="text"
               name="name"
               class="popup__input popup__input_type_name"
               placeholder="Имя"
+              minlength="2" maxlength="40"
+              pattern="^[a-zA-Z]+$"
+              data-error-message="Разрешены только латинские буквы!!!" 
               required
             />
+            <span class="name-input-error form__input-error"></span>  
             <input
+              id="description-input"
               type="text"
               name="description"
               class="popup__input popup__input_type_description"
               placeholder="Занятие"
+              minlength="2" maxlength="200"
+              pattern="^[a-zA-Z]+$"
+              data-error-message="Разрешены только латинские буквы!!!" 
               required
             />
+            <span class="description-input-error form__input-error"></span>  
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
           </form>
         </div>
       </div>
-
+      <!-- ПОПАП ДОБАВЛЕНИЯ КАРТОЧКИ -->
       <div class="popup popup_type_new-card">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Новое место</h3>
-          <form class="popup__form" name="new-place">
+          <form class="popup__form" name="new-place" novalidate>
             <input
+              id="place-name-input"
               type="text"
               name="place-name"
               class="popup__input popup__input_type_card-name"
               placeholder="Название"
+              minlength="2" maxlength="40"
               required
             />
+            <span class="place-name-input-error form__input-error"></span>
             <input
+              id="link-input"
               type="url"
               name="link"
               class="popup__input popup__input_type_url"
               placeholder="Ссылка на картинку"
               required
             />
+            <span class="link-input-error form__input-error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
           </form>
         </div>
       </div>
-
+      <!-- ПОПАП КАРТИНКИ -->
       <div class="popup popup_type_image">
         <div class="popup__content popup__content_content_image">
           <button type="button" class="popup__close"></button>
@@ -99,7 +115,7 @@
         </div>
       </div>
     </div>
-
+    <!-- TEMPLATE -->
     <template id="card-template">
       <li class="places__item card">
         <img class="card__image" src="" alt="" />

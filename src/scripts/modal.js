@@ -17,4 +17,3 @@ function closeModal(popupElement) {
   popupElement.classList.toggle("popup_is-opened");
   document.removeEventListener("keydown", handleEscapeKeydown);
 }
-
