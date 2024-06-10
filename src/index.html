@@ -52,8 +52,8 @@
               class="popup__input popup__input_type_name"
               placeholder="Имя"
               minlength="2" maxlength="40"
-              pattern="^[a-zA-Z]+$"
-              data-error-message="Разрешены только латинские буквы!!!" 
+              pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
+              data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы" 
               required
             />
             <span class="name-input-error form__input-error"></span>  
@@ -64,8 +64,8 @@
               class="popup__input popup__input_type_description"
               placeholder="Занятие"
               minlength="2" maxlength="200"
-              pattern="^[a-zA-Z]+$"
-              data-error-message="Разрешены только латинские буквы!!!" 
+              pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
+              data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы" 
               required
             />
             <span class="description-input-error form__input-error"></span>  
@@ -88,6 +88,8 @@
               class="popup__input popup__input_type_card-name"
               placeholder="Название"
               minlength="2" maxlength="40"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
+              data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы" 
               required
             />
             <span class="place-name-input-error form__input-error"></span>

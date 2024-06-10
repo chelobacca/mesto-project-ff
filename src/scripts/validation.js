@@ -1,23 +1,23 @@
-export { enableValidation };
+export { enableValidation, clearValidation };
 
 // SHOW ERROR
-const showInputError = (formElement, inputElement, errorMessage) => {
+const showInputError = (formElement, inputElement, errorMessage, validationConfig) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.add("form__input_type_error");
-  errorElement.classList.add("form__input-error_active");
+  inputElement.classList.add(validationConfig.inputErrorClass);
+  errorElement.classList.add("popup__error_visible");
   errorElement.textContent = errorMessage;
 };
 
 // HIDE ERROR
-const hideInputError = (formElement, inputElement) => {
+const hideInputError = (formElement, inputElement, validationConfig) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove("form__input_type_error");
-  errorElement.classList.remove("form__input-error_active");
+  inputElement.classList.remove(validationConfig.inputErrorClass);
+  errorElement.classList.remove("popup__error_visible");
   errorElement.textContent = "";
 };
 
 // CHECK VALIDITY
-const isValid = (formElement, inputElement) => {
+const isValid = (formElement, inputElement, validationConfig) => {
   if (inputElement.validity.patternMismatch) {
     // данные атрибута доступны у элемента инпута через ключевое слово dataset.
     // обратите внимание, что в js имя атрибута пишется в camelCase (да-да, в
@@ -28,25 +28,26 @@ inputElement.setCustomValidity("");
 }
 
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage);
+    showInputError(formElement, inputElement, inputElement.validationMessage, validationConfig);
   } else {
-    hideInputError(formElement, inputElement);
+    hideInputError(formElement, inputElement, validationConfig);
   }
 };
 //LISTENERS
-const setEventListeners = (formElement) => {
+const setEventListeners = (formElement, validationConfig) => {
   // Находим все поля внутри формы, сделаем из них массив методом Array.from
-  const inputList = Array.from(formElement.querySelectorAll(".popup__input"));
+  const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
 
   //button lock
-  const buttonElement = formElement.querySelector(".popup__button");
-  toggleButtonState(inputList, buttonElement);
+  const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
+  toggleButtonState(inputList, buttonElement, validationConfig);
+
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
-      isValid(formElement, inputElement);
+      isValid(formElement, inputElement, validationConfig);
 
       // Вызовем toggleButtonState и передадим ей массив полей и кнопку
-      toggleButtonState(inputList, buttonElement);
+      toggleButtonState(inputList, buttonElement, validationConfig);
     });
   });
 
@@ -56,22 +57,20 @@ const setEventListeners = (formElement) => {
     inputElement.addEventListener("input", () => {
       // Внутри колбэка вызовем isValid,
       // передав ей форму и проверяемый элемент
-      isValid(formElement, inputElement);
+      isValid(formElement, inputElement, validationConfig);
     });
   });
 };
 
 const enableValidation = (validationConfig) => {
   // Найдём все формы с указанным классом в DOM, сделаем из них массив методом Array.from
-  const formList = Array.from(
-    document.querySelectorAll(validationConfig.formSelector)
-  );
+  const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
 
   // Переберём полученную коллекцию
   formList.forEach((formElement) => {
     // Для каждой формы вызовем функцию setEventListeners,
     // передав ей элемент формы
-    setEventListeners(formElement);
+    setEventListeners(formElement, validationConfig);
   });
 };
 
@@ -90,15 +89,26 @@ const hasInvalidInput = (inputList) => {
 // и элемент кнопки, состояние которой нужно менять
 // ИСПРАВИТЬ БАТТОНЭЛЕМЕНТ НА АКТУАЛЬНЫЙ ИЗ ОБЪЕКТА
 
-const toggleButtonState = (inputList, buttonElement) => {
+const toggleButtonState = (inputList, buttonElement, validationConfig) => {
   // Если есть хотя бы один невалидный инпут
   if (hasInvalidInput(inputList)) {
     // сделай кнопку неактивной
     buttonElement.disabled = true;
-    buttonElement.classList.add("form__submit_inactive");
+    buttonElement.classList.add(validationConfig.inactiveButtonClass);
   } else {
     // иначе сделай кнопку активной
     buttonElement.disabled = false;
-    buttonElement.classList.remove("form__submit_inactive");
+    buttonElement.classList.remove(validationConfig.inactiveButtonClass);
   }
 };
+
+const clearValidation = (popupForm, validationConfig) =>{
+  const inputList = Array.from(popupForm.querySelectorAll(validationConfig.inputSelector));
+
+  inputList.forEach((inputElement) => {
+    hideInputError(popupForm, inputElement, validationConfig);
+  });
+  const buttonElement = popupForm.querySelector(validationConfig.submitButtonSelector);
+  toggleButtonState(inputList, buttonElement, validationConfig);
+};
+ 
