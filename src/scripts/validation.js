@@ -1,7 +1,12 @@
 export { enableValidation, clearValidation };
 
 // SHOW ERROR
-const showInputError = (formElement, inputElement, errorMessage, validationConfig) => {
+const showInputError = (
+  formElement,
+  inputElement,
+  errorMessage,
+  validationConfig
+) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(validationConfig.inputErrorClass);
   errorElement.classList.add("popup__error_visible");
@@ -22,24 +27,34 @@ const isValid = (formElement, inputElement, validationConfig) => {
     // данные атрибута доступны у элемента инпута через ключевое слово dataset.
     // обратите внимание, что в js имя атрибута пишется в camelCase (да-да, в
     // HTML мы писали в kebab-case, это не опечатка)
-inputElement.setCustomValidity(inputElement.dataset.errorMessage);
-} else {
-inputElement.setCustomValidity("");
-}
+    inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+  } else {
+    inputElement.setCustomValidity("");
+  }
 
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, validationConfig);
+    showInputError(
+      formElement,
+      inputElement,
+      inputElement.validationMessage,
+      validationConfig
+    );
   } else {
     hideInputError(formElement, inputElement, validationConfig);
   }
 };
+
 //LISTENERS
 const setEventListeners = (formElement, validationConfig) => {
   // Находим все поля внутри формы, сделаем из них массив методом Array.from
-  const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
+  const inputList = Array.from(
+    formElement.querySelectorAll(validationConfig.inputSelector)
+  );
 
   //button lock
-  const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
+  const buttonElement = formElement.querySelector(
+    validationConfig.submitButtonSelector
+  );
   toggleButtonState(inputList, buttonElement, validationConfig);
 
   inputList.forEach((inputElement) => {
@@ -64,7 +79,9 @@ const setEventListeners = (formElement, validationConfig) => {
 
 const enableValidation = (validationConfig) => {
   // Найдём все формы с указанным классом в DOM, сделаем из них массив методом Array.from
-  const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
+  const formList = Array.from(
+    document.querySelectorAll(validationConfig.formSelector)
+  );
 
   // Переберём полученную коллекцию
   formList.forEach((formElement) => {
@@ -102,13 +119,16 @@ const toggleButtonState = (inputList, buttonElement, validationConfig) => {
   }
 };
 
-const clearValidation = (popupForm, validationConfig) =>{
-  const inputList = Array.from(popupForm.querySelectorAll(validationConfig.inputSelector));
+const clearValidation = (popupForm, validationConfig) => {
+  const inputList = Array.from(
+    popupForm.querySelectorAll(validationConfig.inputSelector)
+  );
 
   inputList.forEach((inputElement) => {
     hideInputError(popupForm, inputElement, validationConfig);
   });
-  const buttonElement = popupForm.querySelector(validationConfig.submitButtonSelector);
+  const buttonElement = popupForm.querySelector(
+    validationConfig.submitButtonSelector
+  );
   toggleButtonState(inputList, buttonElement, validationConfig);
 };
- 
