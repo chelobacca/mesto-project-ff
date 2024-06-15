@@ -16,29 +16,21 @@ const cardTemplate = document.querySelector("#card-template").content;
 
 const editButton = document.querySelector(".profile__edit-button");
 const editProfileFormElement = document.querySelector(".popup_type_edit");
-const nameInput = editProfileFormElement.querySelector(
-  ".popup__input_type_name"
-);
-const jobInput = editProfileFormElement.querySelector(
-  ".popup__input_type_description"
-);
+const nameInput = editProfileFormElement.querySelector(".popup__input_type_name");
+const jobInput = editProfileFormElement.querySelector(".popup__input_type_description");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
 const newCardButton = document.querySelector(".profile__add-button");
 const newCardPopup = document.querySelector(".popup_type_new-card");
-const cardNameInput = newCardPopup.querySelector(
-  ".popup__input_type_card-name"
-);
+const cardNameInput = newCardPopup.querySelector(".popup__input_type_card-name");
 const cardLinkInput = newCardPopup.querySelector(".popup__input_type_url");
 
 const imgPopup = document.querySelector(".popup_type_image");
 const popupFullImg = imgPopup.querySelector(".popup__image");
 const popupImgCaption = imgPopup.querySelector(".popup__caption");
 
-const userpicEditButton = document.querySelector(
-  ".profile__userpic-edit-button"
-);
+const userpicEditButton = document.querySelector(".profile__userpic-edit-button");
 const userpicPopup = document.querySelector(".popup_type_userpic");
 const userpicLinkInput = userpicPopup.querySelector(".popup__input_type_url");
 const userpicEditorFormElement = document.querySelector(".popup_type_userpic");
@@ -109,8 +101,6 @@ const promise2 = getInitialCards();
 
 Promise.all([promise1, promise2])
   .then(([response1, response2]) => {
-    console.log(response1.avatar);
-    console.log(response2);
 
     profileImage.style.backgroundImage = "url(" + response1.avatar + ")";
 

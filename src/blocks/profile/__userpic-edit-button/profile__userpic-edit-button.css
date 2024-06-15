@@ -1,0 +1,31 @@
+.profile__userpic-edit-button {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: transparent url('../../../images/edit-icon.svg') center no-repeat;
+  background-size: 26px 26px;
+  border: none;
+  grid-area: button;
+  align-self: center;
+  cursor: pointer;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.profile__userpic-edit-button:hover {
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.9) url('../../../images/edit-icon.svg') no-repeat center;
+  background-size: 26px 26px;
+}
+
+
+
+

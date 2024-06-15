@@ -9,13 +9,7 @@ const config = {
 };
 
 // СОЗДАНИЕ КАРТОЧКИ
-function createCard(
-  template,
-  cardData,
-  removeHandler,
-  likeHandler,
-  ImgPopupOpener
-) {
+function createCard(template, cardData, removeHandler, likeHandler, ImgPopupOpener) {
   const cardElement = template.querySelector(".places__item").cloneNode(true);
 
   // наполнение карточки
@@ -41,7 +35,6 @@ function createCard(
   likeCounter.textContent = cardData.likes.length;
 
   if (cardData.likes.find((like) => like._id === "925dd18e3bbcc7e05265d9dc")) {
-    console.log(cardData.likes.find((like) => like._id === "925dd18e3bbcc7e05265d9dc"));
     likeButton.classList.add("card__like-button_is-active");
   }
 
@@ -73,13 +66,11 @@ const deleteCardQuery = (cardId) => {
 function likeCard(like, card, counter) {
   if (like.classList.contains("card__like-button_is-active")) {
     decreaseLikeCounter(card).then((res) => {
-      console.log(res.likes.length);
       counter.textContent = res.likes.length;
       like.classList.remove("card__like-button_is-active");
     });
   } else {
     increaseLikeCounter(card).then((res) => {
-      console.log(res.likes.length);
       counter.textContent = res.likes.length;
       like.classList.add("card__like-button_is-active");
     });
