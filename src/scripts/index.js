@@ -176,7 +176,6 @@ function handleUserpicFormSubmit(evt) {
     });
 
   closeModal(userpicEditorFormElement);
-  console.log(userpicLinkInput.value);
 }
 
 // РЕДАКТИРОВАНИЕ ПРОФИЛЯ
