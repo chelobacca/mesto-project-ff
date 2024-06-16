@@ -1,6 +1,6 @@
 import "../pages/index.css"; // импорт главного файла стилей
 
-import { createCard, deleteCard, likeCard } from "./card.js";
+import { createCard, likeCard } from "./card.js";
 import { openModal, closeModal } from "./modal.js";
 import { enableValidation, clearValidation } from "./validation.js";
 import {
@@ -10,6 +10,7 @@ import {
   postNewCard,
   updateUserpic,
 } from "./api.js";
+import { deleteCardQuery } from "./api.js";
 
 const placesList = document.querySelector(".places__list");
 const cardTemplate = document.querySelector("#card-template").content;
@@ -95,21 +96,38 @@ buttonCloseList.forEach(function (btn) {
 //VALIDATION
 enableValidation(validationConfig);
 
+// ХЭНДЛЕР УДАЛЕНИЯ
+function deleteCard(card, cardId) {
+  deleteCardQuery(cardId)
+    .then((res) => {
+      card.remove();
+    })
+    .catch((err) => console.log(err));
+}
+
 // INITIAL GET
-const promise1 = getUserProfile();
-const promise2 = getInitialCards();
+const getUserInfoPromise = getUserProfile();
+const getInitialCardsPromise = getInitialCards();
+let userId;
 
-Promise.all([promise1, promise2])
-  .then(([response1, response2]) => {
+Promise.all([getUserInfoPromise, getInitialCardsPromise])
+  .then(([userInfo, initialCards]) => {
+    userId = userInfo._id;
+    profileImage.style.backgroundImage = "url(" + userInfo.avatar + ")";
 
-    profileImage.style.backgroundImage = "url(" + response1.avatar + ")";
+    profileTitle.textContent = userInfo.name;
+    profileDescription.textContent = userInfo.about;
 
-    profileTitle.textContent = response1.name;
-    profileDescription.textContent = response1.about;
-
-    response2.forEach(function (item) {
+    initialCards.forEach(function (item) {
       placesList.append(
-        createCard(cardTemplate, item, deleteCard, likeCard, openImgPopup)
+        createCard(
+          cardTemplate,
+          item,
+          deleteCard,
+          likeCard,
+          openImgPopup,
+          userId
+        )
       );
     });
   })
@@ -120,11 +138,7 @@ Promise.all([promise1, promise2])
 //LOADING
 function renderLoading(isLoading, evt) {
   const submitButton = evt.target.querySelector(".popup__button");
-  if (isLoading) {
-    submitButton.textContent = "Сохранение...";
-  } else {
-    submitButton.textContent = "Сохранить";
-  }
+  submitButton.textContent = isLoading ? "Сохранение..." : "Сохранить";
 }
 
 // ДОБАВЛЕНИЕ КАРТОЧКИ
@@ -134,14 +148,22 @@ function handleCardFormSubmit(evt) {
   evt.preventDefault();
   renderLoading(true, evt);
 
-  const obj = {};
-  obj["name"] = cardNameInput.value;
-  obj["link"] = cardLinkInput.value;
+  const obj = {
+    name: cardNameInput.value,
+    link: cardLinkInput.value,
+  };
 
   postNewCard(obj.name, obj.link)
     .then((res) => {
       placesList.prepend(
-        createCard(cardTemplate, res, deleteCard, likeCard, openImgPopup)
+        createCard(
+          cardTemplate,
+          res,
+          deleteCard,
+          likeCard,
+          openImgPopup,
+          userId
+        )
       );
     })
     .catch((err) => {
@@ -151,8 +173,7 @@ function handleCardFormSubmit(evt) {
       renderLoading(false, evt);
     });
 
-  cardNameInput.value = "";
-  cardLinkInput.value = "";
+  document.forms['new-place'].reset();
   closeModal(newCardPopup);
 }
 
@@ -184,15 +205,11 @@ editProfileFormElement.addEventListener("submit", handleProfileFormSubmit);
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   renderLoading(true, evt);
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
 
   updateUserProfile(nameInput.value, jobInput.value)
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res.status);
+      profileTitle.textContent = res.name;
+      profileDescription.textContent = res.about;
     })
     .catch((err) => {
       console.log(`Ошибка: ${err}`);

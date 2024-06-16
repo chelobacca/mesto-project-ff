@@ -104,7 +104,6 @@ const hasInvalidInput = (inputList) => {
 
 // Функция принимает массив полей ввода
 // и элемент кнопки, состояние которой нужно менять
-// ИСПРАВИТЬ БАТТОНЭЛЕМЕНТ НА АКТУАЛЬНЫЙ ИЗ ОБЪЕКТА
 
 const toggleButtonState = (inputList, buttonElement, validationConfig) => {
   // Если есть хотя бы один невалидный инпут
@@ -120,15 +119,13 @@ const toggleButtonState = (inputList, buttonElement, validationConfig) => {
 };
 
 const clearValidation = (popupForm, validationConfig) => {
-  const inputList = Array.from(
-    popupForm.querySelectorAll(validationConfig.inputSelector)
-  );
+  const inputList = Array.from(popupForm.querySelectorAll(validationConfig.inputSelector));
 
   inputList.forEach((inputElement) => {
     hideInputError(popupForm, inputElement, validationConfig);
   });
-  const buttonElement = popupForm.querySelector(
-    validationConfig.submitButtonSelector
-  );
+  const buttonElement = popupForm.querySelector(validationConfig.submitButtonSelector);
+  const form = popupForm.querySelector(validationConfig.formSelector);
+  form.reset();
   toggleButtonState(inputList, buttonElement, validationConfig);
 };

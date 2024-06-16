@@ -1,4 +1,4 @@
-export { createCard, deleteCard, likeCard };
+export { createCard, likeCard };
 
 const config = {
   baseUrl: "https://nomoreparties.co/v1/wff-cohort-16",
@@ -9,7 +9,14 @@ const config = {
 };
 
 // СОЗДАНИЕ КАРТОЧКИ
-function createCard(template, cardData, removeHandler, likeHandler, ImgPopupOpener) {
+function createCard(
+  template,
+  cardData,
+  removeHandler,
+  likeHandler,
+  imgPopupOpener,
+  userId
+) {
   const cardElement = template.querySelector(".places__item").cloneNode(true);
 
   // наполнение карточки
@@ -21,7 +28,7 @@ function createCard(template, cardData, removeHandler, likeHandler, ImgPopupOpen
   // удаление карточки
   const deleteButton = cardElement.querySelector(".card__delete-button");
 
-  if (cardData.owner._id === "925dd18e3bbcc7e05265d9dc") {
+  if (cardData.owner._id === userId) {
     deleteButton.addEventListener("click", function () {
       removeHandler(cardElement, cardData._id);
     });
@@ -34,7 +41,7 @@ function createCard(template, cardData, removeHandler, likeHandler, ImgPopupOpen
   const likeCounter = cardElement.querySelector(".card__like-counter");
   likeCounter.textContent = cardData.likes.length;
 
-  if (cardData.likes.find((like) => like._id === "925dd18e3bbcc7e05265d9dc")) {
+  if (cardData.likes.some((like) => like._id === userId)) {
     likeButton.classList.add("card__like-button_is-active");
   }
 
@@ -43,39 +50,24 @@ function createCard(template, cardData, removeHandler, likeHandler, ImgPopupOpen
   });
 
   // слушатель на превью картинки
-  cardImage.addEventListener("click", () => ImgPopupOpener(cardData));
+  cardImage.addEventListener("click", () => imgPopupOpener(cardData));
 
   // возврат элемента карточки
   return cardElement;
 }
 
-// ХЭНДЛЕР УДАЛЕНИЯ
-function deleteCard(card, cardId) {
-  card.remove();
-  deleteCardQuery(cardId);
-}
-
-const deleteCardQuery = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/${cardId}`, {
-    method: "DELETE",
-    headers: config.headers,
-  });
-};
-
 // ХЭНДЛЕР ЛАЙКА
-function likeCard(like, card, counter) {
-  if (like.classList.contains("card__like-button_is-active")) {
-    decreaseLikeCounter(card).then((res) => {
+function likeCard(like, cardId, counter) {
+  const likeMethod = like.classList.contains("card__like-button_is-active")
+    ? decreaseLikeCounter
+    : increaseLikeCounter;
+  likeMethod(cardId)
+    .then((res) => {
       counter.textContent = res.likes.length;
-      like.classList.remove("card__like-button_is-active");
-    });
-  } else {
-    increaseLikeCounter(card).then((res) => {
-      counter.textContent = res.likes.length;
-      like.classList.add("card__like-button_is-active");
-    });
-  }
-}
+      like.classList.toggle("card__like-button_is-active");
+    })
+    .catch((err) => console.log(err));
+};
 
 const increaseLikeCounter = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {

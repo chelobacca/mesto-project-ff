@@ -1,3 +1,5 @@
+export { handleResponse };
+
 const config = {
   baseUrl: "https://nomoreparties.co/v1/wff-cohort-16",
   headers: {
@@ -6,28 +8,34 @@ const config = {
   },
 };
 
-///GET PROFILE
+//RESPONSE HANDLER
+function handleResponse(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
+
+// DELETE CARD FROM SERVER
+export const deleteCardQuery = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  }).then((res) => handleResponse(res));
+};
+
+//GET PROFILE
 export const getUserProfile = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then((res) => handleResponse(res));
 };
 
 ///GET CARDS
 export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then((res) => handleResponse(res));
 };
 
 ///UPDATE PROFILE
@@ -39,7 +47,7 @@ export const updateUserProfile = (name, job) => {
       name: name,
       about: job,
     }),
-  });
+  }).then((res) => handleResponse(res));
 };
 
 ///POST NEW CARD
@@ -51,12 +59,7 @@ export const postNewCard = (place, url) => {
       name: place,
       link: url,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then((res) => handleResponse(res));
 };
 
 ///UPDATE USERPIC
@@ -67,10 +70,5 @@ export const updateUserpic = (url) => {
     body: JSON.stringify({
       avatar: url,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then((res) => handleResponse(res));
 };
