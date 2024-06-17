@@ -1,5 +1,3 @@
-export { handleResponse };
-
 const config = {
   baseUrl: "https://nomoreparties.co/v1/wff-cohort-16",
   headers: {
@@ -70,5 +68,21 @@ export const updateUserpic = (url) => {
     body: JSON.stringify({
       avatar: url,
     }),
+  }).then((res) => handleResponse(res));
+};
+
+//LIKE
+export const increaseLikeCounter = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "PUT",
+    headers: config.headers,
+  }).then((res) => handleResponse(res));
+};
+
+//UNLIKE
+export const decreaseLikeCounter = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
   }).then((res) => handleResponse(res));
 };

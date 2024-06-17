@@ -15,7 +15,9 @@ function createCard(
   removeHandler,
   likeHandler,
   imgPopupOpener,
-  userId
+  userId, 
+  increaseLikeCounter,
+  decreaseLikeCounter,
 ) {
   const cardElement = template.querySelector(".places__item").cloneNode(true);
 
@@ -46,7 +48,7 @@ function createCard(
   }
 
   likeButton.addEventListener("click", function () {
-    likeHandler(likeButton, cardData._id, likeCounter);
+    likeHandler(likeButton, cardData._id, likeCounter, increaseLikeCounter, decreaseLikeCounter);
   });
 
   // слушатель на превью картинки
@@ -57,7 +59,7 @@ function createCard(
 }
 
 // ХЭНДЛЕР ЛАЙКА
-function likeCard(like, cardId, counter) {
+function likeCard(like, cardId, counter, increaseLikeCounter, decreaseLikeCounter) {
   const likeMethod = like.classList.contains("card__like-button_is-active")
     ? decreaseLikeCounter
     : increaseLikeCounter;
@@ -69,26 +71,3 @@ function likeCard(like, cardId, counter) {
     .catch((err) => console.log(err));
 };
 
-const increaseLikeCounter = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: "PUT",
-    headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
-};
-
-const decreaseLikeCounter = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: "DELETE",
-    headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
-};

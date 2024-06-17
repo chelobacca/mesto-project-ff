@@ -9,8 +9,10 @@ import {
   updateUserProfile,
   postNewCard,
   updateUserpic,
+  increaseLikeCounter,
+  decreaseLikeCounter,
+  deleteCardQuery
 } from "./api.js";
-import { deleteCardQuery } from "./api.js";
 
 const placesList = document.querySelector(".places__list");
 const cardTemplate = document.querySelector("#card-template").content;
@@ -49,10 +51,10 @@ const validationConfig = {
 
 // ПОПАП ПРОФИЛЯ
 editButton.addEventListener("click", function () {
+  clearValidation(editProfileFormElement, validationConfig);
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
   openModal(editProfileFormElement);
-  clearValidation(editProfileFormElement, validationConfig);
 });
 
 // ПОПАП ДОБАВЛЕНИЯ КАРТОЧКИ
@@ -126,7 +128,9 @@ Promise.all([getUserInfoPromise, getInitialCardsPromise])
           deleteCard,
           likeCard,
           openImgPopup,
-          userId
+          userId, 
+          increaseLikeCounter,
+          decreaseLikeCounter
         )
       );
     });
@@ -162,7 +166,9 @@ function handleCardFormSubmit(evt) {
           deleteCard,
           likeCard,
           openImgPopup,
-          userId
+          userId, 
+          increaseLikeCounter,
+          decreaseLikeCounter
         )
       );
     })
