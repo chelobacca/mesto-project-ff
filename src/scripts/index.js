@@ -11,7 +11,7 @@ import {
   updateUserpic,
   increaseLikeCounter,
   decreaseLikeCounter,
-  deleteCardQuery
+  deleteCardQuery,
 } from "./api.js";
 
 const placesList = document.querySelector(".places__list");
@@ -38,6 +38,10 @@ const userpicPopup = document.querySelector(".popup_type_userpic");
 const userpicLinkInput = userpicPopup.querySelector(".popup__input_type_url");
 const userpicEditorFormElement = document.querySelector(".popup_type_userpic");
 const profileImage = document.querySelector(".profile__image");
+
+const confirmPopup = document.querySelector(".popup_type_confirm");
+
+const cardToDelete = {};
 
 // VALIDATION CONGIG
 const validationConfig = {
@@ -100,12 +104,23 @@ enableValidation(validationConfig);
 
 // ХЭНДЛЕР УДАЛЕНИЯ
 function deleteCard(card, cardId) {
-  deleteCardQuery(cardId)
-    .then((res) => {
-      card.remove();
-    })
-    .catch((err) => console.log(err));
-}
+  openModal(confirmPopup);
+  cardToDelete.id = cardId;
+  cardToDelete.element = card;
+  console.log(cardToDelete);
+  confirmPopup.addEventListener("submit", deleteCardHandler); 
+};
+
+function deleteCardHandler(evt) {
+  evt.preventDefault();
+  deleteCardQuery(cardToDelete.id)
+  .then((res) => {
+    cardToDelete.element.remove();
+    closeModal(confirmPopup);
+    confirmPopup.removeEventListener("submit", deleteCardHandler); 
+  })
+  .catch((err) => console.log(err));
+}; 
 
 // INITIAL GET
 const getUserInfoPromise = getUserProfile();
@@ -128,7 +143,7 @@ Promise.all([getUserInfoPromise, getInitialCardsPromise])
           deleteCard,
           likeCard,
           openImgPopup,
-          userId, 
+          userId,
           increaseLikeCounter,
           decreaseLikeCounter
         )
@@ -166,7 +181,7 @@ function handleCardFormSubmit(evt) {
           deleteCard,
           likeCard,
           openImgPopup,
-          userId, 
+          userId,
           increaseLikeCounter,
           decreaseLikeCounter
         )
@@ -179,7 +194,7 @@ function handleCardFormSubmit(evt) {
       renderLoading(false, evt);
     });
 
-  document.forms['new-place'].reset();
+  document.forms["new-place"].reset();
   closeModal(newCardPopup);
 }
 
